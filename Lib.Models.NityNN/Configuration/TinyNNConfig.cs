@@ -6,5 +6,6 @@ namespace Lib.Models.TinyNN.Configuration
 {
     internal class TinyNNConfig
     {
+        
     }
 }
