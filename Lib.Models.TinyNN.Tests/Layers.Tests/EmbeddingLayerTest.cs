@@ -1,7 +1,6 @@
 using Lib.Models.TinyNN.Configuration;
 using Lib.Models.TinyNN.State;
 using Lib.Models.TinyNN.Layers;
-using NUnit.Framework;
 
 namespace Layers.Tests;
 
@@ -19,7 +18,6 @@ public class EmbeddingLayerTest
         _weights = new TinyNNWeights(_vocabSize, _config.EmbeddingSize);
         _layer = new EmbeddingLayer(_vocabSize, _config, _weights); 
     }
-
 
     [Test]
     public void CheckLengthOfHiddenTest1()

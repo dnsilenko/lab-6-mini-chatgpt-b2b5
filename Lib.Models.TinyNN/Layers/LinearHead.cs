@@ -16,7 +16,6 @@ namespace Lib.Models.TinyNN.Layers
             _weights = tinyNNWeights;
         }
 
-
         public float[] Project(float[] hidden)
         {
            float[] vector = MultiplyHiddenOnWeights(hidden);
