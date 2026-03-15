@@ -4,9 +4,9 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{8D819584-4EC2-52ED-CD78-AA7BA4C26214}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib.Models.NityNN", "Lib.Models.NityNN", "{9E735EDF-9E74-5F46-8405-97F7DFC2FEFF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib.Models.TinyNN", "Lib.Models.TinyNN", "{9E735EDF-9E74-5F46-8405-97F7DFC2FEFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.Models.TinyNN", "Lib.Models.NityNN\Lib.Models.TinyNN.csproj", "{A0C3BDA4-9371-C38F-E44F-2D5F843303F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.Models.TinyNN", "Lib.Models.TinyNN\Lib.Models.TinyNN.csproj", "{A0C3BDA4-9371-C38F-E44F-2D5F843303F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

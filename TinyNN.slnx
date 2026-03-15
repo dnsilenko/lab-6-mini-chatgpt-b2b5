@@ -1,7 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="Contracts/Contracts.csproj" />
-    <Project Path="Lib.Models.NityNN/Lib.Models.TinyNN.csproj" />
+    <Project Path="Lib.Models.TinyNN/Lib.Models.TinyNN.csproj" />
   </Folder>
   <Folder Name="/tests/" />
   <Folder Name="/tests/Lib.Models.TinyNN.Tests/" />
