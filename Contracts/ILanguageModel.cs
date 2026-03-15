@@ -2,8 +2,8 @@
 
 public interface ILanguageModel
 {
-    string ModelKind { get; } // "ngram", "trigram", "tinynn", "tinytransformer"
+    string ModelKind { get; } 
     int VocabSize { get; }
-    float[] NextTokenScores(ReadOnlySpan<int> context); // логiти для кожного токена
+    float[] NextTokenScores(ReadOnlySpan<int> context);
     object GetPayloadForCheckpoint();
 }
