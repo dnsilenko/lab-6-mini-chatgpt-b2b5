@@ -20,7 +20,7 @@ public class EmbeddingLayerTest
     }
 
     [Test]
-    public void CheckLengthOfHiddenTest1()
+    public void EncodeContext_ValidContext_ReturnsVectorWithEmbeddingSizeLength()
     {
         int[] context = new int[] {0, 3, 5, 2, 7};
         float[] hidden = _layer.EncodeContext(context);
@@ -28,7 +28,7 @@ public class EmbeddingLayerTest
     }
 
     [Test]
-    public void CheckLengthOfHiddenTest2()
+    public void EncodeContext_ContextExceedsLimit_ReturnsVectorWithEmbeddingSizeLength()
     {
         int[] context = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         float[] hidden = _layer.EncodeContext(context);
@@ -36,21 +36,21 @@ public class EmbeddingLayerTest
     }
 
     [Test]
-    public void IfContextIsEmptyTest()
+    public void EncodeContext_ContextIsEmpty_ThrowArgumentException()
     {
         int[] context = new int[] {};
         Assert.Throws<ArgumentException>(() => _layer.EncodeContext(context));
     }
 
     [Test]
-    public void InvalidIdTest()
+    public void GetVectorFromId_IdLargerThanVocabSize_ThrowsArgumentOutOfRangeException()
     {
         int invalidId = 11;
         Assert.Throws<ArgumentOutOfRangeException>(() => _layer.GetVectorFromId(invalidId));
     }
 
     [Test]
-    public void ContextCutterTest()
+    public void ContextCutter_ContextExceedsLimit_ReturnsOnlyLastTokens()
     {
         int[] context1 = new int[] {2, 3, 4, 5, 6, 7, 8, 9};
         int[] context2 = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};

@@ -1,9 +1,9 @@
-﻿using Contracts;
+using Contracts;
 using Lib.Models.TinyNN.Configuration;
 using Lib.Models.TinyNN.Layers;
 using Lib.Models.TinyNN.State;
 
-namespace Lib.Models.NityNN;
+namespace Lib.Models.TinyNN;
 
 public class TinyNNModel : ILanguageModel
 {

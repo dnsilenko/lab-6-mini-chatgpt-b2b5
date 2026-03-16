@@ -48,4 +48,11 @@ public class TinyNNWeights
 
         return array;
     }
+
+    public void UpdateAllWeights(float[][] embeddings, float[][] outputweights, float[] outputbias)
+    {
+        Embeddings = embeddings;
+        OutputWeights = outputweights;
+        OutputBias = outputbias;
+    }
 }
