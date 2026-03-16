@@ -1,6 +1,8 @@
 ﻿using Lib.Models.TinyNN.Configuration;
 using Lib.Models.TinyNN.State;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Layers.Tests")]
 namespace Lib.Models.TinyNN.Layers
 {
     public class EmbeddingLayer
@@ -43,7 +45,25 @@ namespace Lib.Models.TinyNN.Layers
             return hidden;
         }
 
-        public float[] GetVectorFromId(int id)
+        public void Backward(ReadOnlySpan<int> context, float[] dHidden, float lr)
+        {
+            int[] cutContext = ContextCutter(context.ToArray());
+            float[] gradient = new float[dHidden.Length];
+            for (int i = 0; i < gradient.Length; i++)
+            {
+                gradient[i] = dHidden[i] / cutContext.Length;
+            }
+
+            for (int i = 0; i < cutContext.Length; i++)
+            {
+                for (int j = 0; j < _weights.Embeddings[0].Length; j++)
+                {
+                    _weights.Embeddings[cutContext[i]][j] -= lr * gradient[j];
+                }
+            }
+        }
+
+        internal float[] GetVectorFromId(int id)
         {
             if (id < 0 || id >= _config.VocabSize)
             {
@@ -52,7 +72,7 @@ namespace Lib.Models.TinyNN.Layers
             return _weights.Embeddings[id];
         }
 
-        public int[] ContextCutter(int[] context)
+        internal int[] ContextCutter(int[] context)
         {
             if (context.Length <= _config.ContextSize)
             {
