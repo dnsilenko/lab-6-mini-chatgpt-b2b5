@@ -38,15 +38,33 @@ public class TinyNNModel : ILanguageModel
 
     public float[] NextTokenScores(ReadOnlySpan<int> context)
     {
-        int[] tokens = context.ToArray(); 
-        float[] hidden = Embedding.EncodeContext(tokens);   
+        int[] tokens = context.ToArray();
+        if (tokens.Length == 0)
+        {
+            throw new ArgumentException("Context is empty.");
+        }
 
+        float[] hidden = Embedding.EncodeContext(tokens);   
         return Linear.Project(hidden);  
     }
 
     public float TrainStep(ReadOnlySpan<int> context, int target, float lr)
     {
-        float[] hidden = Embedding.EncodeContext(context.ToArray());
+        int[] tokens = context.ToArray();
+        if (tokens.Length == 0)
+        {
+            throw new ArgumentException("Context is empty.");
+        }
+        else if (target < 0 || VocabSize <= target)
+        {                                                                    
+            throw new ArgumentOutOfRangeException("Uncorrect taget value.");
+        }
+        else if (lr <= 0)
+        {
+            throw new ArgumentException("lr don't valid");
+        }
+
+        float[] hidden = Embedding.EncodeContext(tokens);
 
         float[] logits = NextTokenScores(context);
         float[] softmax = Softmax(logits);
@@ -63,11 +81,7 @@ public class TinyNNModel : ILanguageModel
 
     public float[] CalculateGradient(float[] probs, int target)
     {
-        for (int i = 0; i < Config.VocabSize; i++)
-        {
-            probs[i] -= (i == target ? 1 : 0);
-        }
-
+        probs[target]--;
         return probs;
     }
 
