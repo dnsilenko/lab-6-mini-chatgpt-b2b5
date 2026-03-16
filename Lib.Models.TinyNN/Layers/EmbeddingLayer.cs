@@ -45,10 +45,6 @@ namespace Lib.Models.TinyNN.Layers
             return hidden;
         }
 
-<<<<<<< HEAD
-    
-=======
->>>>>>> 8ff53f53fc6d34186732928047d7b20152d34a6d
         internal float[] GetVectorFromId(int id)
         {
             if (id < 0 || id >= _config.VocabSize)
@@ -73,27 +69,6 @@ namespace Lib.Models.TinyNN.Layers
 
             return newContext;
         }  
-<<<<<<< HEAD
-
-        public void Backward(ReadOnlySpan<int> context, float[] dHidden, float lr)
-        {
-            int[] cutContext = ContextCutter(context.ToArray());
-            float[] gradient = new float[dHidden.Length];
-            for (int i = 0; i < gradient.Length; i++)
-            {
-                gradient[i] = dHidden[i] / cutContext.Length;
-            }
-
-            for (int i = 0; i < cutContext.Length; i++)
-            {
-                for (int j = 0; j < _weights.Embeddings[0].Length; j++)
-                {
-                    _weights.Embeddings[cutContext[i]][j] -= lr * gradient[j];
-                }
-            }
-        }
-
-=======
       
         public void Backward(ReadOnlySpan<int> context, float[] dHidden, float lr)
           {
@@ -112,6 +87,5 @@ namespace Lib.Models.TinyNN.Layers
                   }
               }
           }
->>>>>>> 8ff53f53fc6d34186732928047d7b20152d34a6d
     }
 }
