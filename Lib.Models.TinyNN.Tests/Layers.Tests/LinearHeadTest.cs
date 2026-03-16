@@ -23,7 +23,7 @@ public class LinearHeadTest
     }
 
     [Test]
-    public void LogitsLengthTest()
+    public void Project_ValidHiddenVector_ReturnsLogitsWithVocabSizeLength()
     {
         int[] context = new int[] {0, 3, 5, 2, 7};
         float[] hidden = _embeddinglayer.EncodeContext(context);
