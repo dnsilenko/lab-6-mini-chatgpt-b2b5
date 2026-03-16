@@ -18,9 +18,9 @@ namespace Lib.Models.TinyNN.Layers
 
         public float[] Project(float[] hidden)
         {
-           float[] vector = MultiplyHiddenOnWeights(hidden);
-           float[] logits = AddBiasToVector(vector);
-           return logits; 
+            float[] vector = MultiplyHiddenOnWeights(hidden);
+            float[] logits = AddBiasToVector(vector);
+            return logits; 
         }
 
         private float[] AddBiasToVector(float[] vector)
@@ -43,6 +43,7 @@ namespace Lib.Models.TinyNN.Layers
                     vector[i] += hidden[j] * _weights.OutputWeights[j][i];
                 }
             }
+
             return vector;
         }
 

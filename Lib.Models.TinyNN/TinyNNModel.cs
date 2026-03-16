@@ -1,4 +1,4 @@
-﻿using Contracts;
+using Contracts;
 using Lib.Models.TinyNN.Configuration;
 using Lib.Models.TinyNN.Layers;
 using Lib.Models.TinyNN.State;
