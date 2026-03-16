@@ -2,7 +2,7 @@ using Lib.Models.TinyNN.Configuration;
 using Lib.Models.TinyNN.State;
 using Lib.Models.TinyNN.Layers;
 
-namespace Layers.Tests;
+namespace Layers.Tests.Layers;
 
 public class EmbeddingLayerTest
 {
@@ -16,13 +16,13 @@ public class EmbeddingLayerTest
     {
         _config = new TinyNNConfig(_vocabSize);
         _weights = new TinyNNWeights(_vocabSize, _config.EmbeddingSize);
-        _layer = new EmbeddingLayer(_vocabSize, _config, _weights); 
+        _layer = new EmbeddingLayer(_vocabSize, _config, _weights);
     }
 
     [Test]
     public void EncodeContext_ValidContext_ReturnsVectorWithEmbeddingSizeLength()
     {
-        int[] context = new int[] {0, 3, 5, 2, 7};
+        int[] context = new int[] { 0, 3, 5, 2, 7 };
         float[] hidden = _layer.EncodeContext(context);
         Assert.That(hidden.Length, Is.EqualTo(32));
     }
@@ -30,7 +30,7 @@ public class EmbeddingLayerTest
     [Test]
     public void EncodeContext_ContextExceedsLimit_ReturnsVectorWithEmbeddingSizeLength()
     {
-        int[] context = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int[] context = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         float[] hidden = _layer.EncodeContext(context);
         Assert.That(hidden.Length, Is.EqualTo(32));
     }
@@ -38,7 +38,7 @@ public class EmbeddingLayerTest
     [Test]
     public void EncodeContext_ContextIsEmpty_ThrowArgumentException()
     {
-        int[] context = new int[] {};
+        int[] context = new int[] { };
         Assert.Throws<ArgumentException>(() => _layer.EncodeContext(context));
     }
 
@@ -52,11 +52,37 @@ public class EmbeddingLayerTest
     [Test]
     public void ContextCutter_ContextExceedsLimit_ReturnsOnlyLastTokens()
     {
-        int[] context1 = new int[] {2, 3, 4, 5, 6, 7, 8, 9};
-        int[] context2 = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int[] context1 = new int[] { 2, 3, 4, 5, 6, 7, 8, 9 };
+        int[] context2 = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         int[] cuttedContext1 = _layer.ContextCutter(context1);
         int[] cuttedContext2 = _layer.ContextCutter(context2);
 
         Assert.That(cuttedContext1, Is.EqualTo(cuttedContext2));
+    }
+
+    [Test]
+    public void Backward_ValidInputs_UpdatesEmbeddingsCorrectly()
+    {
+        int[] tokens = { 3 };
+        ReadOnlySpan<int> context = tokens; 
+        float[] dHidden =
+        {
+            -0.5f, -0.7f, 1f, 2f, -1.4f, 0.7f, 0.8f, 0.6f, 0.2f, -0.3f, 1.1f, -0.9f, 0.4f, 0.5f, -0.2f, 0.3f,
+            -0.6f, 0.9f, -1.2f, 0.1f, 0.8f, -0.4f, 0.6f, -0.1f, 1.3f, -0.8f, 0.2f, 0.7f, -0.5f, 0.4f, -0.3f, 0.9f
+        };
+
+        float[] oldEmbeddings = new float[_weights.Embeddings[3].Length]; 
+        Array.Copy(_weights.Embeddings[3], oldEmbeddings, _weights.Embeddings[3].Length);        
+
+        float lr = 0.01f;
+        _layer.Backward(context, dHidden, lr); 
+
+        for (int i = 0; i < _weights.Embeddings[3].Length; i++) 
+        {
+            float delta = Math.Abs(dHidden[i] * lr);
+            float absDelta = Math.Abs(oldEmbeddings[i] - _weights.Embeddings[3][i]);
+
+            Assert.That(delta, Is.EqualTo(absDelta).Within(0.000001f)); 
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace Lib.Models.TinyNN.Layers
             return logits; 
         }
 
-        private float[] AddBiasToVector(float[] vector)
+        internal float[] AddBiasToVector(float[] vector)
         {
             for (int i = 0; i < _weights.OutputBias.Length; i++)
             {
@@ -33,7 +33,7 @@ namespace Lib.Models.TinyNN.Layers
             return vector;
         }
 
-        private float[] MultiplyHiddenOnWeights(float[] hidden)
+        internal float[] MultiplyHiddenOnWeights(float[] hidden)
         {
             float[] vector = new float[_config.VocabSize];
             for(int i = 0; i < _config.VocabSize; i++)
