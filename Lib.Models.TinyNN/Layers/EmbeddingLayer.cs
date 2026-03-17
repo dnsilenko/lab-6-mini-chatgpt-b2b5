@@ -2,7 +2,7 @@ using Lib.Models.TinyNN.Configuration;
 using Lib.Models.TinyNN.State;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Layers.Tests")]
+[assembly: InternalsVisibleTo("Lib.Models.TinyNN.Tests")]
 namespace Lib.Models.TinyNN.Layers
 {
     public class EmbeddingLayer

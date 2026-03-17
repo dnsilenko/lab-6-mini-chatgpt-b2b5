@@ -3,7 +3,7 @@ using Lib.Models.TinyNN.Configuration;
 using Lib.Models.TinyNN.State;
 namespace Lib.Models.TinyNN.Factories
 {
-    internal class TinyNNModelFactory
+    public class TinyNNModelFactory
     {
         public TinyNNModel CreateNewModel(string modelKind, int vocabSize, int embeddingSize = 32, int contextSize = 8)
         {

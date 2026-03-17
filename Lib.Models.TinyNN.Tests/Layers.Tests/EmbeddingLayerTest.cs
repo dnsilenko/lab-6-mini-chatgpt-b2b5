@@ -2,7 +2,7 @@ using Lib.Models.TinyNN.Configuration;
 using Lib.Models.TinyNN.State;
 using Lib.Models.TinyNN.Layers;
 
-namespace Layers.Tests.Layers;
+namespace Lib.Models.TinyNN.Tests.Layers;
 
 public class EmbeddingLayerTest
 {
@@ -40,6 +40,17 @@ public class EmbeddingLayerTest
     {
         int[] context = new int[] { };
         Assert.Throws<ArgumentException>(() => _layer.EncodeContext(context));
+    }
+
+    [Test]
+    public void GetVectorFromId_ValidId_ReturnsCorrectEmbeddingArray()
+    {
+        int validId = 1;
+        float[] expectedVector = _weights.Embeddings[validId];
+
+        float[] result = _layer.GetVectorFromId(validId);
+
+        Assert.That(result, Is.EqualTo(expectedVector));
     }
 
     [Test]

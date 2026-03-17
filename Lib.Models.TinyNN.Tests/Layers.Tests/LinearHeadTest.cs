@@ -2,7 +2,7 @@ using Lib.Models.TinyNN.Configuration;
 using Lib.Models.TinyNN.State;
 using Lib.Models.TinyNN.Layers;
 
-namespace Layers.Tests.Layers;
+namespace Lib.Models.TinyNN.Tests.Layers;
 
 public class LinearHeadTest
 {
@@ -29,6 +29,29 @@ public class LinearHeadTest
         float[] logits = _linearhead.Project(hidden);
 
         Assert.That(logits.Length, Is.EqualTo(_vocabSize));
+    }
+
+    [Test]
+    public void AddBiasToVector_ZeroInputVector_ReturnsOutputBiasValues()
+    {
+        float[] zeroVector = new float[_weights.OutputBias.Length];
+        float[] expected = _weights.OutputBias;
+
+        float[] result = _linearhead.AddBiasToVector(zeroVector);
+
+        Assert.That(result, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void MultiplyHiddenOnWeights_UnitVectorInput_ReturnsCorrespondingWeightsRow()
+    {
+        float[] hidden = new float[_config.EmbeddingSize];
+        hidden[0] = 1.0f;
+        
+        float[] expectedRow = _weights.OutputWeights[0];
+        float[] result = _linearhead.MultiplyHiddenOnWeights(hidden);
+
+        Assert.That(result, Is.EqualTo(expectedRow));
     }
 
     [Test]
