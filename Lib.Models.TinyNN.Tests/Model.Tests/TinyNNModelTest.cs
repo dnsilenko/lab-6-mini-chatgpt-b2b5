@@ -2,7 +2,7 @@
 using Lib.Models.TinyNN.Configuration;
 using Lib.Models.TinyNN.State;
 
-namespace Layers.Tests.State;
+namespace Lib.Models.TinyNN.Tests.Model;
 
 public class TinyNNModelTest
 {
