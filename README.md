@@ -7,6 +7,7 @@
 
 ## Класи
 
+IMathOps інтерфейс для використання бібліотеки  
 SoftmaxCalculator обчислює ймовірності з логітів  
 LossCalculator обчислює функцію втрат  
 ProbabilitySampler виконує вибір індексу  
