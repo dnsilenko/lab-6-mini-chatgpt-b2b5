@@ -27,12 +27,15 @@ public class TinyNNModel : ILanguageModel
 
     public object GetPayloadForCheckpoint()
     {
-        return new
+        return ToPayload();
+    }
+    
+    public TinyNNPayload ToPayload()
+    {
+        return new TinyNNPayload
         {
-            config = Config,
-            embeddings = Weights.Embeddings,
-            outputWeights = Weights.OutputWeights,
-            outputBias = Weights.OutputBias
+            Config = this.Config,
+            Weights = this.Weights
         };
     }
 

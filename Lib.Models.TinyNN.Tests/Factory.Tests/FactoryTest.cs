@@ -27,12 +27,16 @@ public class FactoryTest
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         var expectedBias = new float[] { 0.1f, 0.2f, 0.3f };
         
+        var weights = new TinyNNWeights(
+            new float[][] { new float[] { 1f, 1f }, new float[] { 2f, 2f }, new float[] { 3f, 3f } },
+            new float[][] { new float[] { 0.5f, 0.5f, 0.5f }, new float[] { 0.5f, 0.5f, 0.5f } },   
+            expectedBias                                                                         
+        );
+
         TinyNNPayload payloadData = new TinyNNPayload
         {
             Config = new TinyNNConfig(3, 2, 8),
-            Embeddings = new float[][] { new float[] { 1f, 1f }, new float[] { 2f, 2f }, new float[] { 3f, 3f } },
-            OutputWeights = new float[][] { new float[] { 0.5f, 0.5f, 0.5f }, new float[] { 0.5f, 0.5f, 0.5f } },
-            OutputBias = expectedBias
+            Weights = weights 
         };
 
         string jsonString = JsonSerializer.Serialize(payloadData, options);
@@ -41,11 +45,17 @@ public class FactoryTest
         TinyNNModelFactory factory = new TinyNNModelFactory();
         TinyNNModel restoredModel = factory.CreateFromPayload(jsonElement, "tinynn");
 
-        float[] zeroHidden = new float[2]; 
-        var result = restoredModel.NextTokenScores(new int[] { 0 }); 
-        
-        Assert.That(restoredModel.VocabSize, Is.EqualTo(3));
+        Assert.Multiple(() =>
+        {
+            Assert.That(restoredModel.VocabSize, Is.EqualTo(3));
+    
+            var scores = restoredModel.NextTokenScores(new int[] { 0 }); 
+            
+            Assert.That(scores.Length, Is.EqualTo(3));
+            Assert.That(scores[0], Is.EqualTo(1.1f).Within(1e-5f));
+        });
     }
+    
 
     [Test]
     public void CreateFromPayload_IncorrectModelKind_ThrowsArgumentException()

@@ -27,12 +27,12 @@ namespace Lib.Models.TinyNN.Layers
 
         internal float[] AddBiasToVector(float[] vector)
         {
+            float[] result = new float[vector.Length];
             for (int i = 0; i < _weights.OutputBias.Length; i++)
             {
-                vector[i] += _weights.OutputBias[i];
+                result[i] = vector[i] + _weights.OutputBias[i];
             }
-
-            return vector;
+            return result;
         }
 
         internal float[] MultiplyHiddenOnWeights(float[] hidden)
