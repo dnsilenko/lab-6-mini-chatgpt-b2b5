@@ -18,8 +18,8 @@ namespace Lib.Training.Metrics
 
             CurrentEpoch = currentEpoch;
             AverageLoss = averageLoss;
-            TotalSteps = totalSteps;
-            ElapsedTime = elapsedTime;
+            TotalSteps += totalSteps;
+            ElapsedTime += elapsedTime;
 
         }
     }
