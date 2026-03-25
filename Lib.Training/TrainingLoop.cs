@@ -12,12 +12,12 @@ public class TrainingLoop : ITrainingLoop
 
         if (model.ModelKind == "NGram")
         {
-            return loopImpl.TrainTinyNN(model, batchProvider, config);     
+            throw new NotImplementedException(); // implement this case, please :)
         }
         else if (model.ModelKind == "TinyNN")
         {
-            throw new NotImplementedException(); // implement this case, please :)
-        }
+            return loopImpl.TrainTinyNN(model, batchProvider, config);
+        }                        
         else if (model.ModelKind == "Transformer")
         {
             new TrainingMetrics();
