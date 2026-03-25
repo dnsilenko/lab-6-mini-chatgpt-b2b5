@@ -4,7 +4,7 @@ namespace Lib.Training.Scheduling
     {
         public static bool ScheduleCheck(int currentEpoch, int checkpointInterval, int totalEpochs)
         {
-            if(currentEpoch < 1)
+            if(currentEpoch < 1 || checkpointInterval < 1 || totalEpochs < 1)
             {
                 return false;
             }
