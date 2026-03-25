@@ -1,10 +1,21 @@
-﻿namespace Lib.Models.TinyNN.State;
+﻿using System.Text.Json.Serialization;
+
+namespace Lib.Models.TinyNN.State;
 
 public class TinyNNWeights
 {
     public float[][] Embeddings { get; private set; } 
     public float[][] OutputWeights { get; private set; } 
     public float[] OutputBias { get; private set; } 
+
+
+    [JsonConstructor]
+    public TinyNNWeights(float[][] embeddings, float[][] outputWeights, float[] outputBias)
+    {
+        Embeddings = embeddings;
+        OutputWeights = outputWeights;
+        OutputBias = outputBias;
+    }
     
     public TinyNNWeights (int vocabSize, int embeddingSize)
     {
@@ -47,12 +58,5 @@ public class TinyNNWeights
         }
 
         return array;
-    }
-
-    public void UpdateAllWeights(float[][] embeddings, float[][] outputweights, float[] outputbias)
-    {
-        Embeddings = embeddings;
-        OutputWeights = outputweights;
-        OutputBias = outputbias;
     }
 }

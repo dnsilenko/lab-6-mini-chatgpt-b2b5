@@ -56,27 +56,29 @@ public class TinyNNWeightsTest
         }
     }
 
-    [Test]
-    public void UpdateAllWeights_ValidInputs_UpdatesWeightsCorrectly()
-    {
-        float[][] newEmbeddings = new float[_vocabSize][];
-        for (int i = 0; i < _vocabSize; i++)
-        {
-            newEmbeddings[i] = new float[_config.EmbeddingSize];
-        }
+    //This test is not needed now
 
-        float[][] newOutputWeights = new float[_config.EmbeddingSize][];
-        for (int i = 0; i < _config.EmbeddingSize; i++)
-        {
-            newOutputWeights[i] = new float[_vocabSize];
-        }
+    //[Test]
+    //public void UpdateAllWeights_ValidInputs_UpdatesWeightsCorrectly()
+    //{
+        //float[][] newEmbeddings = new float[_vocabSize][];
+        //for (int i = 0; i < _vocabSize; i++)
+        //{
+            //newEmbeddings[i] = new float[_config.EmbeddingSize];
+        //}
 
-        float[] newOutputBias = new float[_vocabSize];
+        //float[][] newOutputWeights = new float[_config.EmbeddingSize][];
+        //for (int i = 0; i < _config.EmbeddingSize; i++)
+        //{
+            //newOutputWeights[i] = new float[_vocabSize];
+        //}
 
-        _weights.UpdateAllWeights(newEmbeddings, newOutputWeights, newOutputBias);
+        //float[] newOutputBias = new float[_vocabSize];
 
-        Assert.That(_weights.Embeddings, Is.EqualTo(newEmbeddings));
-        Assert.That(_weights.OutputWeights, Is.EqualTo(newOutputWeights));
-        Assert.That(_weights.OutputBias, Is.EqualTo(newOutputBias));
-    }
+        //_weights.UpdateAllWeights(newEmbeddings, newOutputWeights, newOutputBias);
+
+        //Assert.That(_weights.Embeddings, Is.EqualTo(newEmbeddings));
+        //Assert.That(_weights.OutputWeights, Is.EqualTo(newOutputWeights));
+        //Assert.That(_weights.OutputBias, Is.EqualTo(newOutputBias));
+    //}
 }

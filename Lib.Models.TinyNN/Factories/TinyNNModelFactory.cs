@@ -23,15 +23,12 @@ namespace Lib.Models.TinyNN.Factories
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var data = JsonSerializer.Deserialize<TinyNNPayload>(payload.GetRawText(), options);
 
-            if (data == null)
+            if (data == null || data.Config == null || data.Weights == null)
             {
                 throw new ArgumentNullException(nameof(payload), "Payload cannot be empty!");
             }
-
-            TinyNNWeights weights = new TinyNNWeights(data.Config.VocabSize, data.Config.EmbeddingSize);
-            weights.UpdateAllWeights(data.Embeddings, data.OutputWeights, data.OutputBias);
-
-            return new TinyNNModel(modelKind, data.Config.VocabSize, data.Config, weights);
+            
+            return new TinyNNModel(modelKind, data.Config.VocabSize, data.Config, data.Weights);
         }
     }
 }
