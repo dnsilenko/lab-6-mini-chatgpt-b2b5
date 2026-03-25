@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.4.11605.240 stable
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -9,6 +9,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.Models.TinyNN", "Lib.Models.TinyNN\Lib.Models.TinyNN.csproj", "{A0C3BDA4-9371-C38F-E44F-2D5F843303F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Layers.Tests", "Lib.Models.TinyNN.Tests\Layers.Tests\Layers.Tests.csproj", "{7A48490A-FC41-108A-F583-1B7DD278C179}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.Training", "Lib.Training\Lib.Training.csproj", "{E4360B8C-E615-4F8B-B733-A4DAB3E454E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,6 +30,10 @@ Global
 		{7A48490A-FC41-108A-F583-1B7DD278C179}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A48490A-FC41-108A-F583-1B7DD278C179}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A48490A-FC41-108A-F583-1B7DD278C179}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4360B8C-E615-4F8B-B733-A4DAB3E454E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4360B8C-E615-4F8B-B733-A4DAB3E454E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4360B8C-E615-4F8B-B733-A4DAB3E454E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4360B8C-E615-4F8B-B733-A4DAB3E454E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
