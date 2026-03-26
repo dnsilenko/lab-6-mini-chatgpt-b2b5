@@ -10,7 +10,7 @@ namespace Lib.Training;
 
 public class TrainingLoopImpl 
 {
-    public TrainingMetrics TrainTinyNN (ILanguageModel model, IBatchProvider batchProvider, TrainingConfig config)
+    public TrainingMetrics TrainTinyNN(ILanguageModel model, IBatchProvider batchProvider, TrainingConfig config)
     {
         if (model is not TinyNNModel tinyNNModel)
             throw new InvalidCastException("Invalid model");
@@ -34,21 +34,24 @@ public class TrainingLoopImpl
                 counter++;
             }
 
-            DateTime finishTime = DateTime.Now;
-
-            TimeSpan delta = finishTime - startTime;
-
-            float averageLoss = 0f;
-            if (counter != 0)
+            if (CheckpointScheduler.ScheduleCheck(i, config.CheckpointInterval, config.Epochs))
             {
-                averageLoss = sumLoss / counter;
-            }
+                DateTime finishTime = DateTime.Now;
+                TimeSpan delta = finishTime - startTime;
 
-            metrics.UpdateTinyNN(i + 1, averageLoss, counter, delta);
+                float averageLoss = 0f;
+                if (counter != 0)
+                {
+                    averageLoss = sumLoss / counter;
+                }
+
+                metrics.UpdateTinyNN(i + 1, averageLoss, counter, delta);
+            }
         }
 
         return metrics;
-    }    
+    }
+
 
     public TrainingMetrics TrainNGram(ILanguageModel model, IBatchProvider batchProvider, TrainingConfig config)
     {
@@ -105,7 +108,10 @@ public class TrainingLoopImpl
 
                 if (CheckpointScheduler.ScheduleCheck(i + 1, config.CheckpointInterval, config.Epochs))
                 {
-                    var json = model.GetPayloadForCheckpoint();
+                    var jsonElement = model.GetPayloadForCheckpoint();
+                    string json = JsonSerializer.Serialize(jsonElement, new JsonSerializerOptions { WriteIndented = true });
+
+                    File.WriteAllText("Data/NGramCheckpoints.json", json);
                 }
             }           
         }
