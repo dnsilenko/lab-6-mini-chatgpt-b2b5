@@ -9,7 +9,13 @@ namespace Lib.Training.Metrics
         public int? NGramCount { get; private set; }
         public TimeSpan ElapsedTime { get; private set; }
 
-        public TrainingMetrics() {}
+        public TrainingMetrics() 
+        {
+            AverageLoss = 0;
+            Perplexity = 0;
+            TotalSteps = 0;
+            NGramCount = 0;
+        }
 
         public void UpdateTinyNN(int currentEpoch, float averageLoss, int totalSteps, TimeSpan elapsedTime)
         {
