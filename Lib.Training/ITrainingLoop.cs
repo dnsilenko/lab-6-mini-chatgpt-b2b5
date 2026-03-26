@@ -12,4 +12,4 @@ public interface ITrainingLoop
 public interface IBatchProvider
 {
     int[] GetBatch();
-}   
+} 

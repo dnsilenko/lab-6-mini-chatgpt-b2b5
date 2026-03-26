@@ -10,9 +10,9 @@ public class TrainingLoop : ITrainingLoop
     {
         TrainingLoopImpl loopImpl = new TrainingLoopImpl();
 
-        if (model.ModelKind == "NGram")
+        if (model.ModelKind == "bigram" || model.ModelKind == "trigram")
         {
-            throw new NotImplementedException(); // implement this case, please :)
+            return loopImpl.TrainNGram(model, batchProvider, config);
         }
         else if (model.ModelKind == "TinyNN")
         {
