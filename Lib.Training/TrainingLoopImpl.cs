@@ -2,12 +2,15 @@ using Contracts;
 using Lib.Models.TinyNN;
 using Lib.Training.Configuration;
 using Lib.Training.Metrics;
+using Lib.Training.Scheduling;
+using System.Diagnostics.Metrics;
+using System.Text.Json;
 
 namespace Lib.Training;
 
 public class TrainingLoopImpl 
 {
-    public TrainingMetrics TrainTinyNN (ILanguageModel model, IBatchProvider batchProvider, TrainingConfig config)
+    public TrainingMetrics TrainTinyNN(ILanguageModel model, IBatchProvider batchProvider, TrainingConfig config)
     {
         if (model is not TinyNNModel tinyNNModel)
             throw new InvalidCastException("Invalid model");
@@ -31,21 +34,90 @@ public class TrainingLoopImpl
                 counter++;
             }
 
-            DateTime finishTime = DateTime.Now;
-
-            TimeSpan delta = finishTime - startTime;
-
-            float averageLoss = 0f;
-            if (counter != 0)
+            if (CheckpointScheduler.ScheduleCheck(i, config.CheckpointInterval, config.Epochs))
             {
-                averageLoss = sumLoss / counter;
-            }
+                DateTime finishTime = DateTime.Now;
+                TimeSpan delta = finishTime - startTime;
 
-            metrics.Update(i + 1, averageLoss, counter, delta);
+                float averageLoss = 0f;
+                if (counter != 0)
+                {
+                    averageLoss = sumLoss / counter;
+                }
+
+                metrics.UpdateTinyNN(i + 1, averageLoss, counter, delta);
+            }
         }
 
         return metrics;
-    }    
+    }
+
+
+    public TrainingMetrics TrainNGram(ILanguageModel model, IBatchProvider batchProvider, TrainingConfig config)
+    {
+        int n;
+        INGramModels nGramModel;
+
+        if (model.ModelKind == "bigram" && model is NGramModel bigramModel)
+        {
+            nGramModel = bigramModel;
+            n = 2;
+        }
+        else if (model.ModelKind == "trigram" && model is TrigramModel trigramModel)
+        {
+            nGramModel = trigramModel;
+            n = 3;
+        }
+        else
+        {
+            throw new InvalidCastException("Invalid model");
+        }
+
+        TrainingMetrics metrics = new TrainingMetrics();
+        int[] tokens = batchProvider.GetBatch();
+
+        for (int i = 0; i < config.Epochs; i++)
+        {
+            if (i == 0 || i == config.Epochs - 1)
+            {
+                float perplexity = 0;
+                int nGramCount = 0;
+
+                DateTime startTime = DateTime.Now;
+
+                nGramModel.Train(tokens);
+
+                DateTime finishTime = DateTime.Now;
+
+                TimeSpan delta = finishTime - startTime;
+
+                PerplexityCalculator calculator = new PerplexityCalculator();
+
+                if (n == 2)
+                {
+                    perplexity = calculator.ComputePerplexityBigram((NGramModel)nGramModel, tokens);                    
+                }
+                else
+                {
+                    perplexity = calculator.ComputePerplexityTrigram((TrigramModel)nGramModel, tokens);
+                }
+
+                nGramCount = tokens.Length - n + 1;
+
+                metrics.UpdateNGram(i + 1, perplexity, nGramCount, delta);
+
+                if (CheckpointScheduler.ScheduleCheck(i + 1, config.CheckpointInterval, config.Epochs))
+                {
+                    var jsonElement = model.GetPayloadForCheckpoint();
+                    string json = JsonSerializer.Serialize(jsonElement, new JsonSerializerOptions { WriteIndented = true });
+
+                    File.WriteAllText("Data/NGramCheckpoints.json", json);
+                }
+            }           
+        }
+
+        return metrics;
+    }
 
     private int[] GetContext (int[] tokens, int endIndex)
     {

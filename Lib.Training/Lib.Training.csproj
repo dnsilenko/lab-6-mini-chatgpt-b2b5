@@ -4,6 +4,10 @@
     <ProjectReference Include="..\Lib.Models.TinyNN\Lib.Models.TinyNN.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net8.0</TargetFramework>

@@ -10,7 +10,7 @@ public class UpdateMetricsTest
     public void Update_IfValuesIsValid_MetricsPropertiesEqualToParameters(int currentEpoch, float averageLoss, int totalSteps)
     {
         TrainingMetrics trainingMetrics = new TrainingMetrics();
-        trainingMetrics.Update(currentEpoch, averageLoss, totalSteps, new TimeSpan(10, 12, 3));
+        trainingMetrics.UpdateTinyNN(currentEpoch, averageLoss, totalSteps, new TimeSpan(10, 12, 3));
 
         Assert.Multiple(() =>
         {
@@ -27,6 +27,6 @@ public class UpdateMetricsTest
     {
         TrainingMetrics trainingMetrics = new TrainingMetrics();
 
-        Assert.Throws<ArgumentException>(() => trainingMetrics.Update(currentEpoch, averageLoss, totalSteps, new TimeSpan(0, 11, 34)));
+        Assert.Throws<ArgumentException>(() => trainingMetrics.UpdateTinyNN(currentEpoch, averageLoss, totalSteps, new TimeSpan(0, 11, 34)));
     }
 }
