@@ -1,22 +1,23 @@
 using Contracts;
+using Lib.Batching;
+using Lib.Batching.Configuration;
 using Lib.Models.TinyNN;
 using Lib.Training.Configuration;
 using Lib.Training.Metrics;
 using Lib.Training.Scheduling;
-using System.Diagnostics.Metrics;
 using System.Text.Json;
 
 namespace Lib.Training;
 
 public class TrainingLoopImpl 
 {
-    public TrainingMetrics TrainTinyNN(ILanguageModel model, IBatchProvider batchProvider, TrainingConfig config)
+    public TrainingMetrics TrainTinyNN(ILanguageModel model, IBatchProvider batchProvider, TrainingConfig config, BatchConfig batchConfig)
     {
         if (model is not TinyNNModel tinyNNModel)
             throw new InvalidCastException("Invalid model");
 
         TrainingMetrics metrics = new TrainingMetrics();
-        int[] tokens = batchProvider.GetBatch();
+        Random rng = new Random();
 
         for (int i = 0; i < config.Epochs; i++)
         {
@@ -24,10 +25,14 @@ public class TrainingLoopImpl
             int counter = 0;
             DateTime startTime = DateTime.Now;
 
-            for (int j = 0; j < tokens.Length - 1; j++)
+            Batch batch = batchProvider.GetBatch(batchConfig, rng);
+            int[][] inputs = batch.Inputs;
+            int[] targets = batch.Targets;
+
+            for (int j = 0; j < inputs.Length; j++)
             {
-                int[] context = GetContext(tokens, j);
-                int target = tokens[j + 1];
+                int[] context = inputs[j];
+                int target = targets[j];
 
                 float loss = tinyNNModel.TrainStep(context, target, config.LearningRate);
                 sumLoss += loss;
@@ -52,8 +57,7 @@ public class TrainingLoopImpl
         return metrics;
     }
 
-
-    public TrainingMetrics TrainNGram(ILanguageModel model, IBatchProvider batchProvider, TrainingConfig config)
+    public TrainingMetrics TrainNGram(ILanguageModel model, int[] tokens, TrainingConfig config)
     {
         int n;
         INGramModels nGramModel;
@@ -74,13 +78,12 @@ public class TrainingLoopImpl
         }
 
         TrainingMetrics metrics = new TrainingMetrics();
-        int[] tokens = batchProvider.GetBatch();
 
         for (int i = 0; i < config.Epochs; i++)
         {
             if (i == 0 || i == config.Epochs - 1)
             {
-                float perplexity = 0;
+                float perplexity = 0f;
                 int nGramCount = 0;
 
                 DateTime startTime = DateTime.Now;
@@ -88,14 +91,13 @@ public class TrainingLoopImpl
                 nGramModel.Train(tokens);
 
                 DateTime finishTime = DateTime.Now;
-
                 TimeSpan delta = finishTime - startTime;
 
                 PerplexityCalculator calculator = new PerplexityCalculator();
 
                 if (n == 2)
                 {
-                    perplexity = calculator.ComputePerplexityBigram((NGramModel)nGramModel, tokens);                    
+                    perplexity = calculator.ComputePerplexityBigram((NGramModel)nGramModel, tokens);
                 }
                 else
                 {
@@ -113,20 +115,9 @@ public class TrainingLoopImpl
 
                     File.WriteAllText("Data/NGramCheckpoints.json", json);
                 }
-            }           
+            }
         }
 
         return metrics;
-    }
-
-    private int[] GetContext (int[] tokens, int endIndex)
-    {
-        int[] context = new int[endIndex + 1];
-        for (int i = 0; i <= endIndex; i++)
-        {
-            context[i] = tokens[i];  
-        }
-
-        return context;  
     }
 }

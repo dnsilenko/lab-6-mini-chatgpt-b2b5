@@ -6,7 +6,7 @@ public class TinyNNConfig
     public int EmbeddingSize { get; } 
     public int ContextSize { get; } 
 
-    public TinyNNConfig(int vocabSize, int embeddingSize = 32, int contextSize = 8)
+    public TinyNNConfig(int vocabSize, int embeddingSize = 32, int contextSize = 8192)
     {
         VocabSize = vocabSize;
         EmbeddingSize = embeddingSize;

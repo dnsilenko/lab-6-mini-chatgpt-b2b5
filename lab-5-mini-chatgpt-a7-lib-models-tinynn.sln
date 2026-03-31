@@ -1,3 +1,4 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.4.11605.240
@@ -13,6 +14,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.Models.TinyNN.Tests", "Lib.Models.TinyNN.Tests\Lib.Models.TinyNN.Tests.csproj", "{52617363-310B-AC94-BD5D-01542D082A54}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.Training.Tests", "Lib.Training.Tests\Lib.Training.Tests.csproj", "{38212BFF-F45E-2F3B-0F85-85A0FE0BF263}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.Batching", "Lib.Batching\Lib.Batching.csproj", "{FCE5BE84-4819-D4DA-F766-F9BC0554B8DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.BatchingTests", "Lib.BatchingTests\Lib.BatchingTests.csproj", "{014B38F2-0053-46D1-ACB5-5F497C95ECD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.MathCore", "Lib.MathCore\Lib.MathCore.csproj", "{F5B4BACA-5E6C-AE8D-AA5A-A5839D68F0BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.MathCore.Tests", "Lib.MathCore.Tests\Lib.MathCore.Tests.csproj", "{2A8590FF-510A-0D28-9DE4-C4073654ED80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +49,22 @@ Global
 		{38212BFF-F45E-2F3B-0F85-85A0FE0BF263}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38212BFF-F45E-2F3B-0F85-85A0FE0BF263}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38212BFF-F45E-2F3B-0F85-85A0FE0BF263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCE5BE84-4819-D4DA-F766-F9BC0554B8DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCE5BE84-4819-D4DA-F766-F9BC0554B8DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCE5BE84-4819-D4DA-F766-F9BC0554B8DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCE5BE84-4819-D4DA-F766-F9BC0554B8DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{014B38F2-0053-46D1-ACB5-5F497C95ECD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{014B38F2-0053-46D1-ACB5-5F497C95ECD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{014B38F2-0053-46D1-ACB5-5F497C95ECD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{014B38F2-0053-46D1-ACB5-5F497C95ECD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5B4BACA-5E6C-AE8D-AA5A-A5839D68F0BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5B4BACA-5E6C-AE8D-AA5A-A5839D68F0BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5B4BACA-5E6C-AE8D-AA5A-A5839D68F0BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5B4BACA-5E6C-AE8D-AA5A-A5839D68F0BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A8590FF-510A-0D28-9DE4-C4073654ED80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A8590FF-510A-0D28-9DE4-C4073654ED80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A8590FF-510A-0D28-9DE4-C4073654ED80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A8590FF-510A-0D28-9DE4-C4073654ED80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

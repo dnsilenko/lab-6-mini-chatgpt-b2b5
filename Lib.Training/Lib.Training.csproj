@@ -1,11 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Lib.Models.TinyNN\Lib.Models.TinyNN.csproj" />
+    <Compile Remove="Data\**" />
+    <EmbeddedResource Remove="Data\**" />
+    <None Remove="Data\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
+    <ProjectReference Include="..\Contracts\Contracts.csproj" />
+    <ProjectReference Include="..\Lib.Batching\Lib.Batching.csproj" />
+    <ProjectReference Include="..\Lib.Models.TinyNN\Lib.Models.TinyNN.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

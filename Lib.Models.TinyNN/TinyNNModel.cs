@@ -1,4 +1,5 @@
 using Contracts;
+using Lib.MathCore;
 using Lib.Models.TinyNN.Configuration;
 using Lib.Models.TinyNN.Layers;
 using Lib.Models.TinyNN.State;
@@ -67,10 +68,11 @@ public class TinyNNModel : ILanguageModel
             throw new ArgumentException("lr don't valid");
         }
 
+        MathOpsImpl mathOpsImpl = new MathOpsImpl();
         float[] hidden = Embedding.EncodeContext(tokens);
 
         float[] logits = NextTokenScores(context);
-        float[] softmax = Softmax(logits);
+        float[] softmax = mathOpsImpl.Softmax(logits);
         float[] dLogits = CalculateGradient(softmax, target);
 
         float[] dHidden = Linear.Backward(hidden, dLogits, lr);
@@ -86,10 +88,5 @@ public class TinyNNModel : ILanguageModel
     {
         probs[target]--;
         return probs;
-    }
-
-    private float[] Softmax(float[] logits)
-    {
-        return logits;
     }
 }

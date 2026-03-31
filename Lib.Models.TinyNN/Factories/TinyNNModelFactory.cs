@@ -5,7 +5,7 @@ namespace Lib.Models.TinyNN.Factories
 {
     public class TinyNNModelFactory
     {
-        public TinyNNModel CreateNewModel(string modelKind, int vocabSize, int embeddingSize = 32, int contextSize = 8)
+        public TinyNNModel CreateNewModel(string modelKind, int vocabSize, int embeddingSize = 32, int contextSize = 8192)
         {
             TinyNNConfig config = new TinyNNConfig(vocabSize, embeddingSize, contextSize);
             TinyNNWeights weights = new TinyNNWeights(vocabSize, embeddingSize);

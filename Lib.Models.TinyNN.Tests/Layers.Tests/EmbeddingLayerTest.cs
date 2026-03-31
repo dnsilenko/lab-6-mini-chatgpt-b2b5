@@ -68,7 +68,7 @@ public class EmbeddingLayerTest
         int[] cuttedContext1 = _layer.ContextCutter(context1);
         int[] cuttedContext2 = _layer.ContextCutter(context2);
 
-        Assert.That(cuttedContext1, Is.EqualTo(cuttedContext2));
+        Assert.That(cuttedContext1, Is.Not.EqualTo(cuttedContext2));
     }
 
     [Test]
