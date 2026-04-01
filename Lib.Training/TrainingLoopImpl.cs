@@ -63,7 +63,7 @@ public class TrainingLoopImpl
     public TrainingMetrics TrainNGram(ILanguageModel model, int[] tokens, TrainingConfig config)
     {
         int n;
-        INGramModels nGramModel;
+        INGramModel nGramModel;
 
         if (model.ModelKind == "bigram" && model is NGramModel bigramModel)
         {
