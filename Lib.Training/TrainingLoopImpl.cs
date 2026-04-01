@@ -19,6 +19,7 @@ public class TrainingLoopImpl
         TrainingMetrics metrics = new TrainingMetrics();
         Random rng = new Random();
 
+        int totalSteps = 0;
         for (int i = 0; i < config.Epochs; i++)
         {
             float sumLoss = 0f;
@@ -39,7 +40,9 @@ public class TrainingLoopImpl
                 counter++;
             }
 
-            if (CheckpointScheduler.ScheduleCheck(i, config.CheckpointInterval, config.Epochs))
+            totalSteps += counter;
+
+            if (CheckpointScheduler.ScheduleCheck(i + 1, config.CheckpointInterval, config.Epochs))
             {
                 DateTime finishTime = DateTime.Now;
                 TimeSpan delta = finishTime - startTime;
@@ -50,7 +53,7 @@ public class TrainingLoopImpl
                     averageLoss = sumLoss / counter;
                 }
 
-                metrics.UpdateTinyNN(i + 1, averageLoss, counter, delta);
+                metrics.UpdateTinyNN(i + 1, averageLoss, totalSteps, delta);
             }
         }
 

@@ -1,0 +1,81 @@
+﻿using Contracts;
+using Lib.Batching;
+using Lib.Batching.Configuration;
+using Lib.Batching.Sampling;
+using Lib.Batching.Tests;
+using Lib.Models.TinyNN;
+using Lib.Models.TinyNN.Configuration;
+using Lib.Models.TinyNN.State;
+using Lib.Training;
+using Lib.Training.Configuration;
+using Lib.Training.Metrics;
+
+namespace Integration.TrainingData.Test
+{
+    public class TrainingMetricsTests
+    {
+        private TinyNNConfig _tinyNNConfig;
+        private TinyNNWeights _tinyNNWeights;
+        private ArrayTokenStream _arrayTokenStream;
+        private TrainingLoopImpl _trainingLoopImpl;
+
+        private int _vocabSize;
+        private string _modelKind;
+
+        private int[] _tokens;
+
+        [SetUp]
+        public void Setup()
+        {
+            _vocabSize = 4;
+            _modelKind = "TinyNN";
+            _tokens = [0, 1, 2, 3];
+
+            _trainingLoopImpl = new TrainingLoopImpl();
+            _arrayTokenStream = new ArrayTokenStream(_tokens);
+            _tinyNNConfig = new TinyNNConfig(_vocabSize);
+            _tinyNNWeights = new TinyNNWeights(_tinyNNConfig.VocabSize, _tinyNNConfig.EmbeddingSize);
+        }
+
+        [Test]
+        public void BatchingAndTraining_TinyNN_ReceivesTrainStepCalls()
+        {
+            ILanguageModel model = new TinyNNModel(_modelKind, _vocabSize, _tinyNNConfig, _tinyNNWeights);
+            IBatchProvider batchProvider = new TokenBatchProvider(_arrayTokenStream, new BatchWindowSampler());
+
+            int epochs = 10;
+            float lr = 0.01f;
+            int checkpointIntreval = 2;
+            TrainingConfig trainingConfig = new TrainingConfig(epochs, lr, checkpointIntreval);
+
+            int batchSize = 2;
+            int blockSize = 2;
+            BatchConfig batchConfig = new BatchConfig(batchSize, blockSize);
+
+            TrainingMetrics metrics = _trainingLoopImpl.TrainTinyNN(model, batchProvider, trainingConfig, batchConfig);
+
+            Assert.That(metrics.AverageLoss, Is.Not.NaN);
+            Assert.That(metrics.CurrentEpoch, Is.EqualTo(10));
+            Assert.That(metrics.ElapsedTime, Is.Not.Default);
+            Assert.That(metrics.TotalSteps, Is.EqualTo(20));
+        }
+
+        [Test]
+        public void BatchingAndTraining_TinyNN_ThrowsExxception()
+        {
+            ILanguageModel model = null;
+            IBatchProvider batchProvider = new TokenBatchProvider(_arrayTokenStream, new BatchWindowSampler());
+
+            int epochs = 10;
+            float lr = 0.01f;
+            int checkpointIntreval = 2;
+            TrainingConfig trainingConfig = new TrainingConfig(epochs, lr, checkpointIntreval);
+
+            int batchSize = 2;
+            int blockSize = 2;
+            BatchConfig batchConfig = new BatchConfig(batchSize, blockSize);
+
+            Assert.Throws<InvalidCastException>(() => _trainingLoopImpl.TrainTinyNN(model, batchProvider, trainingConfig, batchConfig)); 
+        }
+    }
+}

@@ -56,6 +56,8 @@ namespace Lib.Models.TinyNN.Layers
 
         internal int[] ContextCutter(int[] context)
         {
+            if (context.Length == 0) throw new ArgumentException("Context is empty");
+
             if (context.Length <= _config.ContextSize)
             {
                 return context;

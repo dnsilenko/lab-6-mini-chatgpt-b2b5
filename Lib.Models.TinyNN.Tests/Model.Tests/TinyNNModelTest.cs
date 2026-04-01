@@ -64,6 +64,20 @@ public class TinyNNModelTest
     }
 
     [Test]
+    public void TrainStep_CorrectContext_ReturnsIsNotNan()
+    {
+        int[] tokens = { 0, 1, 2, 3 };
+        ReadOnlySpan<int> context = tokens;
+
+        int target = 1;
+        float lr = 0.01f;
+
+        float result = _model.TrainStep(context, target, lr);
+
+        Assert.That(result, Is.Not.NaN);
+    }
+
+    [Test]
     public void TrainStep_EmptyContext_ThrowsArgumentException()
     {
         int[] tokens = { };

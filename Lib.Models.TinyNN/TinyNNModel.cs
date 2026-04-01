@@ -49,7 +49,15 @@ public class TinyNNModel : ILanguageModel
         }
 
         float[] hidden = Embedding.EncodeContext(tokens);   
-        return Linear.Project(hidden);  
+
+        float[] logits = Linear.Project(hidden);
+        for (int i = 0; i < logits.Length; i++)
+        {
+            if (float.IsNaN(logits[i])) throw new ArgumentException("Logits is NaN.");
+            if (float.IsInfinity(logits[i])) throw new ArgumentException("Logits is infinity.");
+        }
+
+        return logits;
     }
 
     public float TrainStep(ReadOnlySpan<int> context, int target, float lr)
@@ -72,14 +80,22 @@ public class TinyNNModel : ILanguageModel
         float[] hidden = Embedding.EncodeContext(tokens);
 
         float[] logits = NextTokenScores(context);
-        float[] softmax = mathOpsImpl.Softmax(logits);
-        float[] dLogits = CalculateGradient(softmax, target);
+        float[] probs = mathOpsImpl.Softmax(logits);
+        for (int i = 0; i < probs.Length; i++)
+        {
+            if (float.IsNaN(probs[i])) throw new ArgumentException("Softmax is NaN.");
+            if (float.IsInfinity(probs[i])) throw new ArgumentException("Softmax is infinity.");
+            if (probs[i] == 0f) throw new ArgumentException("Softmax is zero");
+            if (float.IsNegative(probs[i])) throw new ArgumentException("softmax is negative");
+        }
+
+        float probsTarget = probs[target];
+        float loss = (float)Math.Log(probsTarget);
+
+        float[] dLogits = CalculateGradient(probs, target);
 
         float[] dHidden = Linear.Backward(hidden, dLogits, lr);
         Embedding.Backward(context, dHidden, lr);
-
-        float probsTarget = softmax[target];
-        float loss = (float)Math.Log(probsTarget);
 
         return loss * -1;
     }
