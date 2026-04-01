@@ -1,5 +1,4 @@
-﻿public interface INGramModels
+﻿public interface INGramModel
 {
     public void Train(ReadOnlySpan<int> tokens);
 }
-
