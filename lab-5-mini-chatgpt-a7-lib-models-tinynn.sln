@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.MathCore.Tests", "Lib.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration.TrainingData.Test", "Integration.TrainingData.Test\Integration.TrainingData.Test.csproj", "{F47CDA59-2770-43F6-874B-E2B0E958ACE0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration.Neural.Test", "Integration.Neural.Test\Integration.Neural.Test.csproj", "{1A7551A6-8415-4981-8E67-F92DE0EF0C02}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{F47CDA59-2770-43F6-874B-E2B0E958ACE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F47CDA59-2770-43F6-874B-E2B0E958ACE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F47CDA59-2770-43F6-874B-E2B0E958ACE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A7551A6-8415-4981-8E67-F92DE0EF0C02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A7551A6-8415-4981-8E67-F92DE0EF0C02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A7551A6-8415-4981-8E67-F92DE0EF0C02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A7551A6-8415-4981-8E67-F92DE0EF0C02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
