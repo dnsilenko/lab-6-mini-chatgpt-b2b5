@@ -23,7 +23,7 @@ namespace Integration.TrainingData.Test
         private string _modelKind;
 
         private int[] _tokens;
-
+                                                        
         [SetUp]
         public void Setup()
         {
