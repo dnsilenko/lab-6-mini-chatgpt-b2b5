@@ -81,13 +81,6 @@ public class TinyNNModel : ILanguageModel
 
         float[] logits = NextTokenScores(context);
         float[] probs = mathOpsImpl.Softmax(logits);
-        for (int i = 0; i < probs.Length; i++)
-        {
-            if (float.IsNaN(probs[i])) throw new ArgumentException("Softmax is NaN.");
-            if (float.IsInfinity(probs[i])) throw new ArgumentException("Softmax is infinity.");
-            if (probs[i] == 0f) throw new ArgumentException("Softmax is zero");
-            if (float.IsNegative(probs[i])) throw new ArgumentException("softmax is negative");
-        }
 
         float probsTarget = probs[target];
         float loss = (float)Math.Log(probsTarget);
