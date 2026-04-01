@@ -26,7 +26,7 @@ namespace Lib.Training.Metrics
 
             CurrentEpoch = currentEpoch;
             AverageLoss = averageLoss;
-            TotalSteps += totalSteps;
+            TotalSteps = totalSteps;
             ElapsedTime += elapsedTime;
             Perplexity = null;
             NGramCount = null;
