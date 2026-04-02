@@ -1,3 +1,6 @@
+using System.Text.Json.Serialization;
+using Lib.Models.TinyTransformer.Configuration;
+using Lib.Models.TinyTransformer.Layers;
 namespace Lib.Models.TinyTransformer.State
 {
     public class TinyTransformerWeights
@@ -17,6 +20,25 @@ namespace Lib.Models.TinyTransformer.State
         public TinyTransformerWeights()
         {
         }
+
+        [JsonConstructor]
+        public TinyTransformerWeights(float[][] tokenEmbeddings, float[][] wq, float[][] wk, float[][] wv, float[][] wo, 
+                                    float[][] ffn1, float[] ffn1Bias, float[][] ffn2, float[] ffn2Bias, 
+                                    float[][] outputW, float[] outputBias)
+        {
+            TokenEmbeddings = FromJaggedArray(tokenEmbeddings);
+            Wq = FromJaggedArray(wq);
+            Wk = FromJaggedArray(wk);
+            Wv = FromJaggedArray(wv);
+            Wo = FromJaggedArray(wo);
+            Ffn1 = FromJaggedArray(ffn1);
+            Ffn1Bias = ffn1Bias;
+            Ffn2 = FromJaggedArray(ffn2);
+            Ffn2Bias = ffn2Bias;
+            OutputW = FromJaggedArray(outputW);
+            OutputBias = outputBias;
+        }
+         
 
         public static TinyTransformerWeights Initialize(int vocabSize, int embeddingSize, Random? random = null)
         {
@@ -56,6 +78,24 @@ namespace Lib.Models.TinyTransformer.State
                 }
             }
             return matrix;
+        }
+
+        private static float[,] FromJaggedArray(float[][] jagged)
+        {
+            if (jagged == null || jagged.Length == 0) return new float[0, 0];
+            
+            int rows = jagged.Length;
+            int cols = jagged[0].Length;
+            float[,] result = new float[rows, cols];
+            
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    result[i, j] = jagged[i][j];
+                }
+            }
+            return result;
         }
     }
 }
