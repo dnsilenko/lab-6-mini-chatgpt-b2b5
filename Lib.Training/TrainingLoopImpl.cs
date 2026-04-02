@@ -116,8 +116,12 @@ public class TrainingLoopImpl
                     var jsonElement = model.GetPayloadForCheckpoint();
                     string json = JsonSerializer.Serialize(jsonElement, new JsonSerializerOptions { WriteIndented = true });
 
-                    File.WriteAllText("Data/NGramCheckpoints.json", json);
+                    File.WriteAllText("../../../../Data/NGramCheckpoints.json", json);
                 }
+            }
+            else
+            {
+                metrics.UpdateNGram(i + 1, (float)metrics.Perplexity, (int)metrics.NGramCount, metrics.ElapsedTime);
             }
         }
 
