@@ -10,8 +10,12 @@ public class TrainingLoop : ITrainingLoop
 {
     public TrainingMetrics Train (ILanguageModel model, IBatchProvider batchProvider, TrainingConfig config, BatchConfig batchConfig, int[] tokens)
     {
-        TrainingLoopImpl loopImpl = new TrainingLoopImpl();
+        if (model == null)
+        {
+            throw new ArgumentException("Invalid data");
+        }
 
+        TrainingLoopImpl loopImpl = new TrainingLoopImpl();
         if (model.ModelKind == "bigram" || model.ModelKind == "trigram")
         {
             return loopImpl.TrainNGram(model, tokens, config);
