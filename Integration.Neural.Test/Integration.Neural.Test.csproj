@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\Lib.Models.TinyNN\Lib.Models.TinyNN.csproj" />
     <ProjectReference Include="..\Lib.Models.TinyTransformer\Lib.Models.TinyTransformer.csproj" />
   </ItemGroup>
