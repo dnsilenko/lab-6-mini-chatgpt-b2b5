@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lib.Models.TinyNN\Lib.Models.TinyNN.csproj" />
+    <ProjectReference Include="..\Lib.Models.TinyTransformer\Lib.Models.TinyTransformer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

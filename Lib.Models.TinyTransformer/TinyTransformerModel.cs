@@ -99,6 +99,25 @@ namespace Lib.Models.TinyTransformer
             return Forward(context, _config.VocabSize, _config.EmbeddingSize);
         }
 
+        public TinyTransformerPayload ToPayload()
+        {
+            return new TinyTransformerPayload
+            {
+                Config = this._config,
+                TokenEmbeddings = ToJaggedArray(this._weights.TokenEmbeddings),
+                Wq = ToJaggedArray(this._weights.Wq),
+                Wk = ToJaggedArray(this._weights.Wk),
+                Wv = ToJaggedArray(this._weights.Wv),
+                Wo = ToJaggedArray(this._weights.Wo),
+                Ffn1 = ToJaggedArray(this._weights.Ffn1),
+                Ffn1Bias = this._weights.Ffn1Bias,
+                Ffn2 = ToJaggedArray(this._weights.Ffn2),
+                Ffn2Bias = this._weights.Ffn2Bias,
+                OutputW = ToJaggedArray(this._weights.OutputW),
+                OutputBias = this._weights.OutputBias
+            };
+        }
+
         public object GetPayloadForCheckpoint()
         {
             return new
