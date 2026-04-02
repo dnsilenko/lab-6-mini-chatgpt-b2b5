@@ -1,11 +1,13 @@
-﻿namespace Lib.Models.TinyTransformer.Layers
+using Lib.Models.TinyTransformer.State;
+
+namespace Lib.Models.TinyTransformer.Layers
 {
     public class TransformerBlock
     {
         private readonly SelfAttentionLayer _attention = new();
         private readonly FeedForwardLayer _ffn = new();
 
-        public float[][] Forward(float[][] x, dynamic weights, int d)
+        public float[][] Forward(float[][] x, TinyTransformerWeights weights, int d)
         {
             float[][] attnOut = _attention.Compute(x, weights, d);
             float[][] result = new float[x.Length][];

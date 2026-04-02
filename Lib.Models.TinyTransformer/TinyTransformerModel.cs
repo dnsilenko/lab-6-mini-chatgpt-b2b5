@@ -1,14 +1,16 @@
+using Contracts;
+using Lib.MathCore;
 using Lib.Models.TinyTransformer.Configuration;
 using Lib.Models.TinyTransformer.Layers;
 using Lib.Models.TinyTransformer.State;
 
 namespace Lib.Models.TinyTransformer
 {
-    public class TinyTransformerModel
+    public class TinyTransformerModel : ILanguageModel
     {
         private readonly TinyTransformerConfig _config;
         private readonly TinyTransformerWeights _weights;
-        private readonly SelfAttentionLayer _attention;
+        private readonly TransformerBlock _transformerBlock;
 
         public string ModelKind => "tinytransformer";
         public int VocabSize => _config.VocabSize;
@@ -18,75 +20,7 @@ namespace Lib.Models.TinyTransformer
         {
             _config = config;
             _weights = weights;
-            _attention = new SelfAttentionLayer();
-        }
-
-        public float[] Compute(ReadOnlySpan<int> context, int embeddingSize)
-        {
-            int n = Math.Min(context.Length, _config.ContextSize);
-            int start = context.Length > _config.ContextSize ? context.Length - _config.ContextSize : 0;
-
-            float[][] embeddings = new float[n][];
-            for (int i = 0; i < n; i++)
-            {
-                int tokenId = context[start + i];
-                embeddings[i] = new float[embeddingSize];
-                for (int j = 0; j < embeddingSize; j++)
-                {
-                    embeddings[i][j] = _weights.TokenEmbeddings[tokenId, j];
-                }
-            }
-
-            float[][] attnOutput = _attention.Compute(embeddings, _weights, embeddingSize);
-
-            return attnOutput[n - 1];
-        }
-
-        public float[] Project(float[] hidden, int vocabSize)
-        {
-            int d = hidden.Length;
-            int dff = 4 * d;
-
-            float[] ffnHidden = new float[dff];
-            for (int j = 0; j < dff; j++)
-            {
-                float sum = _weights.Ffn1Bias[j];
-                for (int i = 0; i < d; i++)
-                {
-                    sum += hidden[i] * _weights.Ffn1[i, j];
-                }
-                ffnHidden[j] = Math.Max(0, sum);
-            }
-
-            float[] ffnOut = new float[d];
-            for (int j = 0; j < d; j++)
-            {
-                float sum = _weights.Ffn2Bias[j];
-                for (int i = 0; i < dff; i++)
-                {
-                    sum += ffnHidden[i] * _weights.Ffn2[i, j];
-                }
-                ffnOut[j] = sum;
-            }
-
-            float[] logits = new float[vocabSize];
-            for (int j = 0; j < vocabSize; j++)
-            {
-                float sum = _weights.OutputBias[j];
-                for (int i = 0; i < d; i++)
-                {
-                    sum += ffnOut[i] * _weights.OutputW[i, j];
-                }
-                logits[j] = sum;
-            }
-
-            return logits;
-        }
-
-        public float[] Forward(ReadOnlySpan<int> context, int vocabSize, int embeddingSize)
-        {
-            float[] hidden = Compute(context, embeddingSize);
-            return Project(hidden, vocabSize);
+            _transformerBlock = new TransformerBlock();
         }
 
         public float[] NextTokenScores(ReadOnlySpan<int> context)
@@ -96,7 +30,55 @@ namespace Lib.Models.TinyTransformer
                 return new float[_config.VocabSize];
             }
 
-            return Forward(context, _config.VocabSize, _config.EmbeddingSize);
+            var truncatedContext = context.Length > _config.ContextSize
+                ? context.Slice(context.Length - _config.ContextSize)
+                : context;
+
+            return Forward(truncatedContext, _config.VocabSize, _config.EmbeddingSize);
+        }
+
+        private float[] Forward(ReadOnlySpan<int> context, int vocabSize, int embeddingSize)
+        {
+            float[][] embeddings = Embed(context, embeddingSize);
+
+            float[][] blockOutput = _transformerBlock.Forward(embeddings, _weights, embeddingSize);
+
+            float[] lastHidden = blockOutput[blockOutput.Length - 1];
+
+            return Project(lastHidden, vocabSize);
+        }
+
+        private float[][] Embed(ReadOnlySpan<int> context, int embeddingSize)
+        {
+            float[][] embeddings = new float[context.Length][];
+            for (int i = 0; i < context.Length; i++)
+            {
+                embeddings[i] = new float[embeddingSize];
+                int tokenId = context[i];
+                for (int j = 0; j < embeddingSize; j++)
+                {
+                    embeddings[i][j] = _weights.TokenEmbeddings[tokenId, j];
+                }
+            }
+            return embeddings;
+        }
+
+        private float[] Project(float[] hidden, int vocabSize)
+        {
+            float[] logits = new float[vocabSize];
+            int embeddingSize = hidden.Length;
+
+            for (int v = 0; v < vocabSize; v++)
+            {
+                float sum = _weights.OutputBias[v];
+                for (int i = 0; i < embeddingSize; i++)
+                {
+                    sum += hidden[i] * _weights.OutputW[i, v];
+                }
+                logits[v] = sum;
+            }
+
+            return logits;
         }
 
         public TinyTransformerPayload ToPayload()

@@ -1,10 +1,11 @@
-using System;
+using Lib.MathCore;
+using Lib.Models.TinyTransformer.State;
 
 namespace Lib.Models.TinyTransformer.Layers
 {
     public class SelfAttentionLayer
     {
-        public float[][] Compute(float[][] x, dynamic weights, int d)
+        public float[][] Compute(float[][] x, TinyTransformerWeights weights, int d)
         {
             int n = x.Length;
             float[][] Q = Multiply(x, weights.Wq, d);
@@ -37,7 +38,7 @@ namespace Lib.Models.TinyTransformer.Layers
             float[][] output = new float[n][];
             for (int i = 0; i < n; i++)
             {
-                float[] attentionWeights = Softmax(scores[i]);
+                float[] attentionWeights = MathOps.Default.Softmax(scores[i]);
                 output[i] = new float[d];
                 for (int j = 0; j <= i; j++)
                 {
@@ -67,38 +68,6 @@ namespace Lib.Models.TinyTransformer.Layers
                 }
             }
             return result;
-        }
-
-        private float[] Softmax(float[] logits)
-        {
-            float max = float.NegativeInfinity;
-            foreach (float v in logits)
-            {
-                if (v > max)
-                {
-                    max = v;
-                }
-            }
-
-            float[] exp = new float[logits.Length];
-            float sum = 0;
-            for (int i = 0; i < logits.Length; i++)
-            {
-                if (float.IsNegativeInfinity(logits[i]))
-                {
-                    exp[i] = 0;
-                }
-                else
-                {
-                    exp[i] = (float)Math.Exp(logits[i] - max);
-                    sum += exp[i];
-                }
-            }
-            for (int i = 0; i < exp.Length; i++)
-            {
-                exp[i] /= sum;
-            }
-            return exp;
         }
     }
 }

@@ -29,10 +29,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration.Neural.Test", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.Models.TinyTransformer", "Lib.Models.TinyTransformer\Lib.Models.TinyTransformer.csproj", "{182A6450-A36B-4F7C-AC2E-FF74F8389F53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.Models.NGram", "Lib.Models.NGram\Lib.Models.NGram.csproj", "{AF9F31B0-8A94-2744-0697-444F499EBAFE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.Models.NGram.Tests", "Lib.Models.NGram.Tests\Lib.Models.NGram.Tests.csproj", "{AC63E3BE-5BFB-833D-97A4-AAD22BDB59C2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,14 +83,6 @@ Global
 		{182A6450-A36B-4F7C-AC2E-FF74F8389F53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{182A6450-A36B-4F7C-AC2E-FF74F8389F53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{182A6450-A36B-4F7C-AC2E-FF74F8389F53}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AF9F31B0-8A94-2744-0697-444F499EBAFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AF9F31B0-8A94-2744-0697-444F499EBAFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AF9F31B0-8A94-2744-0697-444F499EBAFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AF9F31B0-8A94-2744-0697-444F499EBAFE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC63E3BE-5BFB-833D-97A4-AAD22BDB59C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC63E3BE-5BFB-833D-97A4-AAD22BDB59C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC63E3BE-5BFB-833D-97A4-AAD22BDB59C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC63E3BE-5BFB-833D-97A4-AAD22BDB59C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
