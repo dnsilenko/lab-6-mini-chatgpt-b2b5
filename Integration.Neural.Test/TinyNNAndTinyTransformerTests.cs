@@ -44,24 +44,18 @@ namespace Integration.Neural.Test
         public void TinyNN_SoftmaxSumsToOne()
         {
             var factory = new TinyNNModelFactory();
-            int vocabSize = 50;
-            var model = factory.CreateNewModel("tinynn", vocabSize);
+            var model = factory.CreateNewModel("tinynn", _vocabSize);
 
-            var context = new int[] { 1, 2, 3 };
-
-            float[] logits = model.NextTokenScores(context);
+            float[] logits = model.NextTokenScores(_tokens);
             float[] probabilities = SoftmaxCalculator.Softmax(logits); 
 
-            
             float sum = 0;
             foreach (var p in probabilities)
             {
                 sum += p;
             }
 
-            
-            Assert.That(sum, Is.EqualTo(1.0f).Within(1e-6f), "Сума ймовірностей після Softmax має дорівнювати 1.0");
-            
+            Assert.That(sum, Is.EqualTo(1.0f).Within(1e-6f), "Сума ймовірностей після Softmax має дорівнювати 1.0"); 
             Assert.That(probabilities, Is.All.GreaterThanOrEqualTo(0f), "Ймовірності не можуть бути від'ємними");
         }
 
@@ -69,13 +63,9 @@ namespace Integration.Neural.Test
         public void TinyNN_CheckpointRoundTrip_PreservesModel()
         {
             var factory = new TinyNNModelFactory();
-            int vocabSize = 100;
-            int embeddingSize = 32;
-            var originalModel = factory.CreateNewModel("tinynn", vocabSize, embeddingSize);
+            var originalModel = factory.CreateNewModel("tinynn", _vocabSize, _tinyNNConfig.EmbeddingSize);
 
-            var testContext = new int[] { 1, 5, 10, 42 };
-
-            float[] originalScores = originalModel.NextTokenScores(testContext);
+            float[] originalScores = originalModel.NextTokenScores(_tokens);
 
             var payload = originalModel.ToPayload();
             string json = JsonSerializer.Serialize(payload);
@@ -83,7 +73,7 @@ namespace Integration.Neural.Test
             var doc = JsonDocument.Parse(json);
             var restoredModel = factory.CreateFromPayload(doc.RootElement, "tinynn");
 
-            float[] restoredScores = restoredModel.NextTokenScores(testContext);
+            float[] restoredScores = restoredModel.NextTokenScores(_tokens);
 
             Assert.Multiple(() =>
             {
@@ -101,16 +91,11 @@ namespace Integration.Neural.Test
         public void TinyTransformer_CheckpointRoundTrip_PreservesModel()
         {
             var factory = new TinyTransformerModelFactory();
-            int vocabSize = 20;
-            int embeddingSize = 32;
             int headCount = 2;
-            int contextSize = 8192;
             
-            var originalModel = factory.Create(vocabSize, embeddingSize, headCount, contextSize);
-            
-            var testContext = new int[] { 1, 2, 3 };
+            var originalModel = factory.Create(_vocabSize, _tinyNNConfig.EmbeddingSize, headCount, _tinyNNConfig.ContextSize);
 
-            float[] originalScores = originalModel.NextTokenScores(testContext);
+            float[] originalScores = originalModel.NextTokenScores(_tokens);
 
             var payload = originalModel.ToPayload();
             string json = JsonSerializer.Serialize(payload);
@@ -118,7 +103,7 @@ namespace Integration.Neural.Test
             using var doc = JsonDocument.Parse(json);
             var restoredModel = factory.CreateFromPayload(doc.RootElement);
 
-            float[] restoredScores = restoredModel.NextTokenScores(testContext);
+            float[] restoredScores = restoredModel.NextTokenScores(_tokens);
 
             Assert.That(restoredScores.Length, Is.EqualTo(originalScores.Length), "Кількість логітів має бути рівною VocabSize");
 
