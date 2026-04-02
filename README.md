@@ -78,15 +78,37 @@ learningRate -> коефіцієнт сили оновлення ваг моде
 
 У результаті отримуємо тренування моделі
 
-|
-|
-|
+
 
 # B5: How to integrate - Neural
 
 Це опис, як у подальшому підключити/взаємодіяти із нашим проєктом
 
-## dfsfsdfsdfds
+## Як створити TinyNN із vocabSize
+
+```
+// розмір словника, що приходить від токенізатора
+int vocabSize = tokenizer.VocabSize
+
+// тип моделі
+string modelKind = "tinynn"
+
+// параметри моделі
+int embeddingSize = 8192
+int contextSize = 8
+
+// створення конфігурації моделі + ваг
+TinyNNConfig config = new TinyNNConfig(vocabSize, embeddingSize, contextSize)
+TinyNNWeights weights = new TinyNNWeights(vocabSize, config)
+
+// створення TinyNNModel
+TinyNNModel model = new TinyNNModel(modelKind, vocabSize, config, weights)
+```
+
+## Що є чим?
+
+EmbeddingSize -> це розмірність вектора, що представляє конкретний токен
+ContextSize -> це розмір контекстного вікна моделі
 
 
 
