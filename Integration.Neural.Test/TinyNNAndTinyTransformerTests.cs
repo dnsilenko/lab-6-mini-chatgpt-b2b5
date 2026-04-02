@@ -87,7 +87,6 @@ namespace Integration.Neural.Test
         }
 
         [Test]
-
         public void TinyTransformer_CheckpointRoundTrip_PreservesModel()
         {
             var factory = new TinyTransformerModelFactory();
