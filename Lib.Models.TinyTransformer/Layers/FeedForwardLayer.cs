@@ -1,8 +1,10 @@
+using Lib.Models.TinyTransformer.State;
+
 namespace Lib.Models.TinyTransformer.Layers
 {
     public class FeedForwardLayer
     {
-        public float[] Compute(float[] x, dynamic weights, int d)
+        public float[] Compute(float[] x, TinyTransformerWeights weights, int d)
         {
             int dff = 4 * d;
             float[] hidden = new float[dff];

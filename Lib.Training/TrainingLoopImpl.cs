@@ -63,7 +63,7 @@ public class TrainingLoopImpl
     public TrainingMetrics TrainNGram(ILanguageModel model, int[] tokens, TrainingConfig config)
     {
         int n;
-        INGramModel nGramModel;
+        INGramModels nGramModel;
 
         if (model.ModelKind == "bigram" && model is NGramModel bigramModel)
         {
@@ -116,12 +116,8 @@ public class TrainingLoopImpl
                     var jsonElement = model.GetPayloadForCheckpoint();
                     string json = JsonSerializer.Serialize(jsonElement, new JsonSerializerOptions { WriteIndented = true });
 
-                    File.WriteAllText("../../../../Data/NGramCheckpoints.json", json);
+                    File.WriteAllText("Data/NGramCheckpoints.json", json);
                 }
-            }
-            else
-            {
-                metrics.UpdateNGram(i + 1, (float)metrics.Perplexity, (int)metrics.NGramCount, metrics.ElapsedTime);
             }
         }
 
