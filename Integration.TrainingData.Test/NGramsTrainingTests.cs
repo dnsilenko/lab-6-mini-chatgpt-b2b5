@@ -86,5 +86,43 @@ namespace Integration.TrainingData.Test
             // Act + Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => trainingLoop.Train(model, null, trainingConfig, null, tokens));
         }
+        [Test]
+public void BatchingAndTraining_SeededRng_ProducesSameBatches()
+{
+    var tokens = new[] { 0, 1, 2, 1, 0, 1, 2 };
+    var seed = 42;
+
+    var provider1 = new TokenBatchProvider(tokens);
+    var model1 = new NGramModel();
+    var config1 = new TrainingConfig(1, 2, 2, 5, null!, seed);
+    var trainingLoop1 = new TrainingLoop();
+    var metrics1 = trainingLoop1.Train(model1, provider1, config1);
+
+    var provider2 = new TokenBatchProvider(tokens);
+    var model2 = new NGramModel();
+    var config2 = new TrainingConfig(1, 2, 2, 5, null!, seed);
+    var trainingLoop2 = new TrainingLoop();
+    var metrics2 = trainingLoop2.Train(model2, provider2, config2);
+
+    Assert.That(metrics1.Perplexity, Is.EqualTo(metrics2.Perplexity), 
+        "При однаковому Seed результати навчання мають повністю збігатися.");
+    
+    Assert.That(metrics1.NGramCount, Is.EqualTo(metrics2.NGramCount), 
+        "Кількість оброблених N-грам має бути однаковою.");
+        }
+[Test]
+        public void BatchingAndTraining_ShortTokenStream_Handled()
+        {
+            int[] tokens = new int[] { 0, 1 };
+            ILanguageModel model = new NGramModel(3);
+
+            var trainingConfig = new TrainingConfig(1, 0, 1);
+            TrainingLoop trainingLoop = new TrainingLoop();
+
+            Assert.DoesNotThrow(() =>
+            {
+                trainingLoop.Train(model, null, trainingConfig, null, tokens);
+            });
+        }
     }
 }
